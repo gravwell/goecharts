@@ -1,0 +1,17 @@
+# Binaries and build output
+/bin/
+/dist/
+*.exe
+*.test
+*.out
+
+# Go workspace and coverage
+go.work
+go.work.sum
+coverage.*
+
+# Editor and OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store
