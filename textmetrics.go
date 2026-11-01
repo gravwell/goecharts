@@ -89,7 +89,7 @@ func countRunes(s string) int {
 
 func isSerif(fam string) bool {
 	// "sans-serif" contains "serif"; look for serif families explicitly.
-	for _, f := range strings.Split(fam, ",") {
+	for f := range strings.SplitSeq(fam, ",") {
 		f = strings.Trim(strings.TrimSpace(f), `"'`)
 		switch {
 		case f == "serif", strings.HasPrefix(f, "times"), f == "georgia", f == "garamond",

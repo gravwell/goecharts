@@ -184,14 +184,12 @@ func TestConcurrent(t *testing.T) {
 	r := sharedRenderer(t)
 	var wg sync.WaitGroup
 	errs := make(chan error, 16)
-	for i := 0; i < 16; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+	for range 16 {
+		wg.Go(func() {
 			if _, err := r.RenderSVG(context.Background(), []byte(barOption), salesData()); err != nil {
 				errs <- err
 			}
-		}()
+		})
 	}
 	wg.Wait()
 	close(errs)

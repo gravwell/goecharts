@@ -191,7 +191,7 @@ func encodeColumn(buf *bytes.Buffer, values any) error {
 	return nil
 }
 
-var timeType = reflect.TypeOf(time.Time{})
+var timeType = reflect.TypeFor[time.Time]()
 
 func encodeValue(buf *bytes.Buffer, rv reflect.Value) error {
 	for rv.Kind() == reflect.Interface || rv.Kind() == reflect.Pointer {

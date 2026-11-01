@@ -10,6 +10,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"maps"
 	"regexp"
 	"strings"
 
@@ -58,9 +59,7 @@ func parseXML(text string) (*xmlNode, error) {
 	d.Entity = xml.HTMLEntity
 	if decls := entityDecl.FindAllStringSubmatch(text, -1); len(decls) > 0 {
 		entities := make(map[string]string, len(xml.HTMLEntity)+len(decls))
-		for k, v := range xml.HTMLEntity {
-			entities[k] = v
-		}
+		maps.Copy(entities, xml.HTMLEntity)
 		for _, m := range decls {
 			entities[m[1]] = m[2] + m[3]
 		}
@@ -131,13 +130,13 @@ func (rt *jsRuntime) xmlToJS(n *xmlNode) goja.Value {
 		return o
 	case "element":
 		_ = o.Set("name", n.name)
-		attrs := make([]interface{}, len(n.attrs))
+		attrs := make([]any, len(n.attrs))
 		for i, a := range n.attrs {
-			attrs[i] = []interface{}{a[0], a[1]}
+			attrs[i] = []any{a[0], a[1]}
 		}
 		_ = o.Set("attrs", vm.ToValue(attrs))
 	}
-	children := make([]interface{}, len(n.children))
+	children := make([]any, len(n.children))
 	for i, c := range n.children {
 		children[i] = rt.xmlToJS(c)
 	}

@@ -469,14 +469,12 @@ type server struct {
 func (s *server) renderAll(r *goecharts.Renderer, workers int) {
 	var wg sync.WaitGroup
 	queue := make(chan *example)
-	for i := 0; i < workers; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+	for range workers {
+		wg.Go(func() {
 			for e := range queue {
 				s.renderOne(r, e)
 			}
-		}()
+		})
 	}
 	for _, e := range s.examples {
 		if e.script != nil {

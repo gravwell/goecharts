@@ -97,8 +97,7 @@ func TestScriptErrors(t *testing.T) {
 	}
 	for name, script := range cases {
 		_, err := r.Render(context.Background(), Request{Script: []byte(script)})
-		var e *Error
-		if !errors.As(err, &e) {
+		if _, ok := errors.AsType[*Error](err); !ok {
 			t.Errorf("%s: expected *Error, got %v", name, err)
 		}
 	}

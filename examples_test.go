@@ -29,7 +29,6 @@ func TestExamples(t *testing.T) {
 	}
 	r := sharedRenderer(t)
 	for _, f := range files {
-		f := f
 		name := strings.TrimSuffix(filepath.Base(f), ".json")
 		t.Run(name, func(t *testing.T) {
 			t.Parallel()

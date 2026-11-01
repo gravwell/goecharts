@@ -47,7 +47,6 @@ func newJSRuntime(r *Renderer) (*jsRuntime, error) {
 
 	console := vm.NewObject()
 	for _, level := range []string{"log", "info", "warn", "error", "debug"} {
-		level := level
 		_ = console.Set(level, func(call goja.FunctionCall) goja.Value {
 			rt.log(level, call.Arguments)
 			return goja.Undefined()
@@ -164,12 +163,10 @@ func wrapJSError(err error) error {
 	if err == nil {
 		return nil
 	}
-	var ierr *goja.InterruptedError
-	if errors.As(err, &ierr) {
+	if _, ok := errors.AsType[*goja.InterruptedError](err); ok {
 		return err
 	}
-	var exc *goja.Exception
-	if errors.As(err, &exc) {
+	if exc, ok := errors.AsType[*goja.Exception](err); ok {
 		msg := exc.Value().String()
 		if obj, ok := exc.Value().(*goja.Object); ok {
 			if m := obj.Get("message"); m != nil && !goja.IsUndefined(m) && m.String() != "" {
